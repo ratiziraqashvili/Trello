@@ -1,6 +1,6 @@
 const OrganizationIdPage = () => {
     return ( 
-        <div>
+        <div className="">
             
         </div>
      );
