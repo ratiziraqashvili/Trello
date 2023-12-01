@@ -45,7 +45,7 @@ export const FormPopover = ({
 
         console.log({image})
 
-        // execute({ title })
+        execute({ title, image })
     }
 
   return (
