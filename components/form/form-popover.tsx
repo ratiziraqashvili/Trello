@@ -14,6 +14,8 @@ import { FormInput } from "./form-input";
 import { FormSubmit } from "./form-submit";
 import { toast } from 'sonner'
 import { FormPicker } from "./form-picker";
+import { ElementRef, useRef } from "react";
+import { useRouter } from "next/navigation";
 
 interface FormPopoverProps {
   children: React.ReactNode;
@@ -28,13 +30,16 @@ export const FormPopover = ({
   align,
   sideOffset = 0,
 }: FormPopoverProps) => {
+    const closeRef = useRef<ElementRef<"button">>(null)
+    const router = useRouter();
+
     const { execute, fieldErrors } = useAction(createBoard, {
         onSuccess: (data) => {
-            console.log({ data });
             toast.success("Board created!");
+            closeRef.current?.click();
+            router.push(`/board/${data.id}`)
         },
         onError: (error) => {
-            console.log({ error });
             toast.error(error)
         }
     })
@@ -60,7 +65,7 @@ export const FormPopover = ({
         <div className="text-sm font-medium text-center text-neutral-600">
           Create board
         </div>
-        <PopoverClose asChild>
+        <PopoverClose ref={closeRef} asChild>
           <Button
             className="h-auto w-auto p-2 absolute top-2 right-2 text-neutral-600"
             variant="ghost"
