@@ -1,33 +1,40 @@
-"use client"
+"use client";
 
 import { ListWithCards } from "@/types";
 import { ListForm } from "./list-form";
 import { useEffect, useState } from "react";
 import { ListItem } from "./list-item";
+import { DragDropContext, Droppable } from "@hello-pangea/dnd";
 
 interface ListContainerProps {
-    data: ListWithCards[];
-    boardId: string;
+  data: ListWithCards[];
+  boardId: string;
 }
 
 export const ListContainer = ({ data, boardId }: ListContainerProps) => {
-    const [orderedData, setOrderedData] = useState(data);
+  const [orderedData, setOrderedData] = useState(data);
 
-    useEffect(() => {
-        setOrderedData(data);
-    }, [data]);
+  useEffect(() => {
+    setOrderedData(data);
+  }, [data]);
 
-    return (
-        <ol className="flex gap-x-3 h-full">
-            {orderedData.map((list, i) => (
-                <ListItem
-                 key={list.id}
-                 index={i}
-                 data={list}
-                />
-            ))}
-            <ListForm />
-            <div className="flex-shrink-0 w-1" />
-        </ol>
-    )
-}
+  return (
+    <DragDropContext onDragEnd={() => {}}>
+      <Droppable droppableId="lists" type="list" direction="horizontal">
+        {(provided) => (
+        <ol 
+         {...provided.droppableProps}
+         ref={provided.innerRef} 
+         className="flex gap-x-3 h-full">
+        {orderedData.map((list, i) => (
+          <ListItem key={list.id} index={i} data={list} />
+        ))}
+        {provided.placeholder}
+        <ListForm />
+        <div className="flex-shrink-0 w-1" />
+      </ol>
+        )}
+      </Droppable>
+    </DragDropContext>
+  );
+};
