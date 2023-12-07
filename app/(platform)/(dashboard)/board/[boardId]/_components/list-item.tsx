@@ -29,8 +29,6 @@ export const ListItem = ({ data, index }: ListItemProps) => {
     });
   };
 
-  console.log(data);
-
   return (
     <Draggable draggableId={data.id} index={index}>
       {(provided) => (
